@@ -13,7 +13,7 @@ namespace GeekShopping.ProductAPI.Model
         public string Name { get; set; }
 
         [Column("price")]
-        [Required]
+        [Required (ErrorMessage = "O titulo do filme é obrigatório ")]
         [Range(1,10000)]
         public decimal Price { get; set; }
 
