@@ -22,7 +22,7 @@ namespace GeekShopping.Web.Services
 
         public async Task<ProductModel> FindProductById(long id)
         {
-            var response = await _client.GetAsync($"{ BasePath}/{id}");
+            var response = await _client.GetAsync($"{BasePath}/id?id={id}");
             return await response.ReadContentAs<ProductModel>();
         }
         public async Task<ProductModel> CreateProduct(ProductModel model)
@@ -41,7 +41,7 @@ namespace GeekShopping.Web.Services
 
         public async Task<bool> DeleteProductById(long id)
         {
-            var response = await _client.DeleteAsync($"{BasePath}/{id}");
+            var response = await _client.DeleteAsync($"{BasePath}/id?id={id}");
             if (response.IsSuccessStatusCode) 
                 return await response.ReadContentAs<bool>();
             else throw new Exception("Something went wrong when calling API");
@@ -50,5 +50,5 @@ namespace GeekShopping.Web.Services
     }
 
       
-    }
-}
+    
+

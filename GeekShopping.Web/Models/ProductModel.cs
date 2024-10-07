@@ -1,4 +1,6 @@
-﻿namespace GeekShopping.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GeekShopping.Web.Models
 {
     public class ProductModel
     {
