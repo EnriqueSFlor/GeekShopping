@@ -6,6 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultScheme = "Cookies";
+//    options.DefaultChallengeScheme = "oidc";
+//})
+//    //.AddCookie("Cookies", c =>)
+
 builder.Services.AddHttpClient<IProductService, ProductServices>(c =>
                     c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
 
@@ -18,6 +25,9 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

@@ -4,6 +4,8 @@ using GeekShopping.ProductAPI.Repository;
 using GeekShopping.ProductAPI.Model.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GeekShopping.ProductAPI.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GeekShopping.ProductAPI.Controllers
 {
@@ -20,6 +22,7 @@ namespace GeekShopping.ProductAPI.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> FindAll()
         {
             var products = await _repository.FindAll();
@@ -27,6 +30,7 @@ namespace GeekShopping.ProductAPI.Controllers
         }
 
         [HttpGet ("id")]
+        [Authorize]
         public async Task<IActionResult> FindById(long id)
         {
             var product = await _repository.FindById(id);
@@ -35,6 +39,7 @@ namespace GeekShopping.ProductAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] ProductVO vo)
         {
             if (vo == null) return BadRequest();
@@ -43,7 +48,9 @@ namespace GeekShopping.ProductAPI.Controllers
 
         }
 
+
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody] ProductVO vo)
         {
             if (vo == null) return NotFound();
@@ -54,6 +61,7 @@ namespace GeekShopping.ProductAPI.Controllers
         }
 
         [HttpDelete("id")]
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> Delete(long id)
         {
            var status = await _repository.Delete(id);
