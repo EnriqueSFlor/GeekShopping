@@ -1,9 +1,12 @@
+
 using GeekShopping.IdentityServer.Configuration;
 using GeekShopping.IdentityServer.Initializer;
 using GeekShopping.IdentityServer.Model;
 using GeekShopping.IdentityServer.Model.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using GeekShopping.IdentityServer.Services;
+using Duende.IdentityServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +36,8 @@ var builderIdentity = builder.Services.AddIdentityServer(options =>
     .AddAspNetIdentity<ApplicationUser>();
 
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builderIdentity.AddDeveloperSigningCredential();
 
