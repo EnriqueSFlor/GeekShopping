@@ -4,7 +4,11 @@ using Duende.IdentityServer.Services;
 using GeekShopping.IdentityServer.Model;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace GeekShopping.IdentityServer.Services
 {
@@ -14,7 +18,9 @@ namespace GeekShopping.IdentityServer.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
 
-        public ProfileService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory)
+        public ProfileService(UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -25,7 +31,8 @@ namespace GeekShopping.IdentityServer.Services
         {
             string id = context.Subject.GetSubjectId();
             ApplicationUser user = await _userManager.FindByIdAsync(id);
-            ClaimsPrincipal userClaims = await _userClaimsPrincipalFactory.CreateAsync(user);
+            ClaimsPrincipal userClaims = await _userClaimsPrincipalFactory
+                .CreateAsync(user);
 
             List<Claim> claims = userClaims.Claims.ToList();
             claims.Add(new Claim(JwtClaimTypes.FamilyName, user.LastName));
@@ -39,13 +46,17 @@ namespace GeekShopping.IdentityServer.Services
                     claims.Add(new Claim(JwtClaimTypes.Role, role));
                     if (_roleManager.SupportsRoleClaims)
                     {
-                        IdentityRole identityRole = await _roleManager.FindByNameAsync(role);
-                        if (identityRole != null) claims.AddRange(await _roleManager.GetClaimsAsync(identityRole));
+                        IdentityRole identityRole = await _roleManager
+                            .FindByNameAsync(role);
+                        if (identityRole != null)
+                        {
+                            claims.AddRange(await _roleManager
+                                .GetClaimsAsync(identityRole));
+                        }
                     }
                 }
             }
             context.IssuedClaims = claims;
-         
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
@@ -53,7 +64,6 @@ namespace GeekShopping.IdentityServer.Services
             string id = context.Subject.GetSubjectId();
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             context.IsActive = user != null;
-            
         }
     }
 }

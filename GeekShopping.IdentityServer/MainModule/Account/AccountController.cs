@@ -261,6 +261,8 @@ namespace IdentityServerHost.Quickstart.UI
         [HttpGet]
         public async Task<IActionResult> Register(string returnUrl)
         {
+
+            ViewData["ReturnUrl"] = returnUrl;
             // build a model so we know what to show on the reg page
             var vm = await BuildRegisterViewModelAsync(returnUrl);
 
@@ -273,6 +275,7 @@ namespace IdentityServerHost.Quickstart.UI
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
+
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
@@ -344,7 +347,9 @@ namespace IdentityServerHost.Quickstart.UI
                             // user might have clicked on a malicious link - should be logged
                             throw new Exception("invalid return URL");
                         }
+
                     }
+                   
 
                 }
             }
@@ -353,13 +358,16 @@ namespace IdentityServerHost.Quickstart.UI
             return View(model);
         }
 
+
         private async Task<RegisterViewModel> BuildRegisterViewModelAsync(string returnUrl)
         {
-            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             List<string> roles = new List<string>();
             roles.Add("Admin");
             roles.Add("Client");
             ViewBag.message = roles;
+
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+       
             if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
             {
                 var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
@@ -378,7 +386,9 @@ namespace IdentityServerHost.Quickstart.UI
                 }
 
                 return vm;
+
             }
+       
 
             var schemes = await _schemeProvider.GetAllSchemesAsync();
 
