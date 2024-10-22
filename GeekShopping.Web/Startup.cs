@@ -29,6 +29,9 @@ namespace GeekShopping.Web
             services.AddHttpClient<IProductService, ProductServices>(c =>
                     c.BaseAddress = new Uri(Configuration["ServiceUrls:ProductAPI"])
                 );
+            services.AddHttpClient<ICartService, CartService>(c =>
+                   c.BaseAddress = new Uri(Configuration["ServiceUrls:CartAPI"])
+               );
             services.AddControllersWithViews();
             services.AddAuthentication(options =>
             {
