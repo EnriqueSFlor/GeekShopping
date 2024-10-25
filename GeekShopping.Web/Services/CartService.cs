@@ -19,7 +19,7 @@ namespace GeekShopping.Web.Services
         public async Task<CartViewModel> FindCartByUserId(string userId, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _client.GetAsync($"{BasePath}/find-cart/id?id={userId}");
+            var response = await _client.GetAsync($"{BasePath}/find-cart/{userId}");
             return await response.ReadContentAs<CartViewModel>();
         }
         public async Task<CartViewModel> AddItemToCart(CartViewModel cart, string token)
@@ -41,7 +41,7 @@ namespace GeekShopping.Web.Services
         public async Task<bool> RemoveFromCart(long cartId, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _client.DeleteAsync($"{BasePath}/remove-cart/id?id={cartId}");
+            var response = await _client.DeleteAsync($"{BasePath}/remove-cart/{cartId}");
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<bool>();
             else throw new Exception("Something went wrong when calling API");

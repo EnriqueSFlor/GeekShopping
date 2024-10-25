@@ -3,6 +3,8 @@ using GeekShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace GeekShopping.Web.Controllers
 {
@@ -24,7 +26,6 @@ namespace GeekShopping.Web.Controllers
             return View(await FinUserCart());
         }
 
-        [Authorize]
         private async Task<CartViewModel> FinUserCart()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
@@ -40,6 +41,19 @@ namespace GeekShopping.Web.Controllers
                 }
             }
             return response;
+        }
+
+
+        public async Task<IActionResult> Remove(int id)
+        {
+            var token = await HttpContext.GetTokenAsync("access_token");
+            var response = await _cartService.RemoveFromCart(id, token);
+            if(response)
+            {
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+
         }
     }
 }
