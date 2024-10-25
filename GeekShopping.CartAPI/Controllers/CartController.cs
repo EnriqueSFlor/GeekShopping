@@ -34,7 +34,7 @@ namespace GeekShopping.CartAPI.Controllers
             return Ok(cart);
         } 
         
-        [HttpPut("update-cart}")]
+        [HttpPut("update-cart")]
         public async Task<IActionResult> UpdateCart(CartVO vo)
         {
 
