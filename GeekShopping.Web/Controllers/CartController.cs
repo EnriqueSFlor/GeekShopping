@@ -59,6 +59,34 @@ namespace GeekShopping.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
+        {
+
+            return View(await FinUserCart());
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Checkout(CartViewModel model)
+        {
+
+            var token = await HttpContext.GetTokenAsync("access_token");
+            var response = await _cartService.Checkout(model.CartHeader, token);
+            if (response != null)
+            {
+                return RedirectToAction(nameof(Confirmation));
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Confirmation()
+        {
+
+            return View();
+        }
+
+
         private async Task<CartViewModel> FinUserCart()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
@@ -74,14 +102,14 @@ namespace GeekShopping.Web.Controllers
                     var coupon = await _couponService.GetCoupon(response.CartHeader.CouponCode, token);
                     if (coupon?.CouponCode != null) 
                     {
-                        response.CartHeader.DiscountTotal = coupon.DiscountAmount;
+                        response.CartHeader.DiscountAmount = coupon.DiscountAmount;
                     }
                 }
                 foreach (var detail in response.CartDetails)
                 {
                     response.CartHeader.PurchaseAmount += (detail.Product.Price * detail.Count);
                 }
-                response.CartHeader.PurchaseAmount -= response.CartHeader.DiscountTotal;
+                response.CartHeader.PurchaseAmount -= response.CartHeader.DiscountAmount;
             }
             return response;
         }
