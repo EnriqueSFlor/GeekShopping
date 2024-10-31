@@ -20,7 +20,7 @@ namespace GeekShopping.Web.Services
         public async Task<CouponViewModel> GetCoupon(string code, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _client.GetAsync($"{BasePath}/id?id={code}");
+            var response = await _client.GetAsync($"{BasePath}/couponCode?couponCode={code}");
             if (response.StatusCode != HttpStatusCode.OK) return new CouponViewModel();
                 return await response.ReadContentAs<CouponViewModel>();
         }

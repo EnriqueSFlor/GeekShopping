@@ -9,10 +9,10 @@ namespace GeekShopping.Web.Models
         public string UserId { get; set; }
         public string CouponCode { get; set; }
         public decimal PurchaseAmount { get; set; }
-        public decimal DiscountTotal { get; set; }
+        public decimal DiscountAmount { get; set; }
         public string FisrtName { get; set; }
         public string LastName { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
         public string Phone { get; set; }
         public string Email { get; set; }
         public string CardNumber { get; set; }
