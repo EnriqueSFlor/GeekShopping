@@ -1,7 +1,7 @@
-﻿using GeekShopping.CartAPI.Data.ValueObjects;
-using GeekShopping.MessageBus;
+﻿using GeekShopping.MessageBus;
+using GeekShopping.OrderAPI.Data.ValueObjects;
 
-namespace GeekShopping.CartAPI.Messages
+namespace GeekShopping.OrderAPI.Messages
 {
     public class CheckoutHeaderVO : BaseMessage
     {
@@ -18,7 +18,7 @@ namespace GeekShopping.CartAPI.Messages
         public string CVV { get; set; }
         public string ExpiryMothYear { get; set; }
         public int CartTotalItens { get; set; }
-        public IEnumerable<CartDetailVO> CartDetails{ get; set; }
+        public IEnumerable<CartDetailVO> CartDetails { get; set; }
+    
     }
 }
-

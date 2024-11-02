@@ -1,15 +1,11 @@
-using AutoMapper;
-using GeekShopping.CartAPI.Config;
-using GeekShopping.CartAPI.Model.Context;
-using GeekShopping.CartAPI.RabbitMQSender;
 using GeekShopping.CartAPI.Repository;
-using Microsoft.AspNetCore.Identity;
+using GeekShopping.OrderAPI.MessageConsumer;
+using GeekShopping.OrderAPI.Model.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add services to the container.
 
@@ -51,12 +47,12 @@ var connection = builder.Configuration["MySqlConnection:MysqlConnectionString"];
 
 builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 38))));
 
-IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-builder.Services.AddSingleton(mapper);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+var builde = new DbContextOptionsBuilder<MySQLContext>();
+builde.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 38)));
 
-builder.Services.AddScoped<ICartRepository, CartRepository>();
-builder.Services.AddScoped<IRabbitMQMessageSender, RabbitMQMessageSender>();
+builder.Services.AddSingleton(new OrderRepository(builde.Options));
+
+builder.Services.AddHostedService<RabbitMQCheckoutConsumer>();
 
 
 builder.Services.AddControllers();
